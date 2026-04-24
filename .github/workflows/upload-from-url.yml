@@ -20,11 +20,18 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download file
+      - name: Download file with browser user-agent
         run: |
-          curl -L -o "${{ inputs.filename }}" "${{ inputs.file_url }}"
+          curl -L --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" -o "${{ inputs.filename }}" "${{ inputs.file_url }}"
 
-      - name: Commit and push
+      - name: Verify file is PDF (or show what we got)
+        run: |
+          echo "First 20 bytes of downloaded file:"
+          xxd -l 20 "${{ inputs.filename }}" || true
+          echo "File command output:"
+          file "${{ inputs.filename }}" || true
+
+      - name: Commit and push if PDF
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
