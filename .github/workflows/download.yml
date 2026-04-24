@@ -1,0 +1,14 @@
+name: Download PDF from URL
+on: [workflow_dispatch]
+
+jobs:
+  fetch-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download file from URL
+        run: wget https://www.cc.gatech.edu/~judy/posters/Hoffman_ECCV2012.pdf
+      - name: Upload as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-downloaded-pdf
+          path: Hoffman_ECCV2012.pdf
